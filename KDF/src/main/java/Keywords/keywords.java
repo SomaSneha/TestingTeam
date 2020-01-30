@@ -2,6 +2,9 @@ package Keywords;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -241,5 +244,32 @@ public class keywords {
 		Actions action=new Actions(driver);
 		action.dragAndDrop(SourceLocation, DestinationLocation).build().perform();
 
+	}
+	public static void validateBrokenLinks() {
+		List<WebElement> links = driver.findElements(By.tagName("a"));
+		System.out.println("no of links: " + links.size());
+		for (int i = 0; i < links.size(); i++) {
+			WebElement element = links.get(i);
+			String url = element.getAttribute("href");
+			verifyActiveLink(url);
+		}
+	}
+
+	public static void verifyActiveLink(String linkUrl) {
+		try {
+			URL url = new URL(linkUrl);
+			HttpURLConnection httpUrlConnect = (HttpURLConnection) url.openConnection();
+			httpUrlConnect.setConnectTimeout(3000);
+			httpUrlConnect.connect();
+			if (httpUrlConnect.getResponseCode() == 200) {
+				System.out.println(linkUrl + "-" + httpUrlConnect.getResponseMessage());
+			}
+			if (httpUrlConnect.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
+				System.out.println(
+						linkUrl + "-" + httpUrlConnect.getResponseMessage() + "-" + HttpURLConnection.HTTP_NOT_FOUND);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
