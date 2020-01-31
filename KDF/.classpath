@@ -126,5 +126,44 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="/KeywordDrivenFramework"/>
+	<classpathentry kind="lib" path="C:/Users/NRK/Downloads/jars/client-combined-3.141.59.jar"/>
+	<classpathentry kind="lib" path="C:/Users/NRK/.m2/repository/io/github/bonigarcia/webdrivermanager/3.7.1/webdrivermanager-3.7.1.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="io.github.bonigarcia"/>
+			<attribute name="maven.artifactId" value="webdrivermanager"/>
+			<attribute name="maven.version" value="3.7.1"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/NRK/.m2/repository/commons-io/commons-io/2.6/commons-io-2.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="commons-io"/>
+			<attribute name="maven.artifactId" value="commons-io"/>
+			<attribute name="maven.version" value="2.6"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/NRK/Downloads/ashot-1.5.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/NRK/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="log4j"/>
+			<attribute name="maven.artifactId" value="log4j"/>
+			<attribute name="maven.version" value="1.2.17"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/NRK/.m2/repository/org/testng/testng/6.14.3/testng-6.14.3.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.testng"/>
+			<attribute name="maven.artifactId" value="testng"/>
+			<attribute name="maven.version" value="6.14.3"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/NRK/Downloads/jars/poi-3.17/poi-ooxml-3.17.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

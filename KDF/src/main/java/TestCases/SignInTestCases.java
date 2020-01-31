@@ -16,7 +16,7 @@ public class SignInTestCases {
 		log.info("URl opened");
 		Keywords.maximiseBrowser();
 		Keywords.implicitWait(10, "SECONDS");
-		Keywords.jsExcuter("XPATH", "//div[@class=\"header-icons\"]/a[contains(text(),'Sign In')]");
+		Keywords.clickOnElementbyJS("XPATH", "//div[@class=\"header-icons\"]/a[contains(text(),'Sign In')]");
 		System.out.println("hi");
 		Keywords.clickOnElement("XPATH", "//span[contains(text(),'Sign in with email')]");
 		Keywords.enterText("XPATH", "//input[@class=\"mdl-textfield__input firebaseui-input firebaseui-id-email\"]",
@@ -37,12 +37,28 @@ public class SignInTestCases {
 		log.info("URl opened");
 		Keywords.maximiseBrowser();
 		Keywords.implicitWait(10, "SECONDS");
-		Keywords.jsExcuter("XPATH", "//div[@class=\"header-icons\"]/a[contains(text(),'Sign In')]");
+		Keywords.clickOnElementbyJS("XPATH", "//div[@class=\"header-icons\"]/a[contains(text(),'Sign In')]");
 		Keywords.clickOnElement("XPATH", "//span[contains(text(),'Sign in with Facebook')]");
 		Keywords.switchToWindow("Log in to Facebook | Facebook");
 		Keywords.enterText("XPATH", "//input[@id=\"email\"]", "ssoma350@gmail.com");
 		Keywords.enterText("XPATH", "//input[@id=\"pass\"]", "");
 		Keywords.clickOnElement("XPATH", "//button[@type=\"submit\"]");
+
+	}
+    
+	public static void signinWithGoogle() {
+		Keywords.openBrowser("Chrome");
+		Keywords.openURL("https://eagercrow.com/Home");
+		Keywords.implicitWait(10, "SECONDS");
+		Keywords.maximiseBrowser();
+		Keywords.clickOnElementbyJS("XPATH", "//div[@class=\"header-icons\"]/a[contains(text(),'Sign In')]");
+	
+		Keywords.clickOnElement("XPATH", "//button[@class=\"firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-google firebaseui-id-idp-button\"]");
+		Keywords.switchToWindow("Sign in - Google Accounts");
+		Keywords.enterText("XPATH", "//input[@type=\"email\"]", "rosesinghritu");
+		Keywords.clickOnElement("XPATH", "//span[contains(text(),'Next')]");
+		Keywords.enterText("XPATH", "//input[@type=\"password\"]", "");
+		Keywords.clickOnElement("XPATH", "//span[contains(text(),'Next')]");
 
 	}
 }

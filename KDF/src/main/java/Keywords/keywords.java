@@ -1,15 +1,30 @@
 package Keywords;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
@@ -19,13 +34,20 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.DataProvider;
+
+import com.sun.glass.events.KeyEvent;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 public class keywords {
 	public static RemoteWebDriver driver;
 	public static Alert alert;
 	public static WebElement element = null;
+	public static List<WebElement> elements=null;
 
 	/**
 	 * This method will open specified browser
@@ -272,4 +294,203 @@ public class keywords {
 			e.printStackTrace();
 		}
 	}
+	
+	@DataProvider
+	public static Object[][] excelFileReading(String filepath) {
+		Object[][] emails = null;
+		try {
+			FileInputStream file = new FileInputStream(filepath);
+			XSSFWorkbook book = new XSSFWorkbook(file);
+			XSSFSheet sheet = book.getSheetAt(0);
+			int rows = sheet.getLastRowNum();
+			XSSFRow row = sheet.getRow(0);
+			int columns = row.getLastCellNum();
+			emails = new Object[rows][columns];
+			for (int i = 0; i < rows; i++) {
+				row = sheet.getRow(i);
+
+				for (int j = 0; j < columns; j++) {
+
+					XSSFCell cell = row.getCell(j);
+
+					switch (cell.getCellType()) {
+					case 0:
+						emails[i][j] = cell.getNumericCellValue();
+						break;
+
+					case 1:
+						emails[i][j] = cell.getStringCellValue();
+						break;
+
+					case 2:
+						emails[i][j] = cell.getCellFormula();
+						break;
+
+					case 3:
+						emails[i][j] = "";
+						break;
+
+					case 4:
+						emails[i][j] = cell.getBooleanCellValue();
+						break;
+
+					case 5:
+						emails[i][j] = cell.getErrorCellValue();
+						break;
+
+					default:
+						System.out.println("Invalid data");
+						break;
+					}
+
+				}
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return emails;
+
+	}
+	
+	
+	/**
+	 * This method will take screenshot of full page.
+	 * @param fileFormat Format of the image file like jpeg,jpg,png,etc.
+	 * @param filepath Path of the file where it should be stored.
+	 */
+	public static void fullPageScreenshot(String fileFormat,String filepath) {
+		AShot ashot=new AShot();
+		Screenshot screenshot=ashot.shootingStrategy(ShootingStrategies.viewportPasting(3000)).takeScreenshot(driver);
+		BufferedImage image=screenshot.getImage();
+		try {
+			ImageIO.write(image, fileFormat, new File(filepath));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	
+
+	}
+
+	public static void failedTestCaseScreenshot() {
+		
+		String dateFormat=new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(new Date());
+		TakesScreenshot ts=(TakesScreenshot)driver;
+		File source=ts.getScreenshotAs(OutputType.FILE);
+		
+
+		try {
+			FileUtils.copyFile(source, new File("KeywordDrivenFramework\\Screenshots\\screenshot_"+dateFormat+".png"));
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+			
+		}
+	}
+		
+		public static void clickOnElementbyJS(String Locatortype, String Locatorvalue) {
+			WebElement element=getWebElement(Locatortype, Locatorvalue);
+			JavascriptExecutor js=(JavascriptExecutor)driver;
+			js.executeScript("arguments[0].scrollIntoView()", element);
+			element.click();
+
+		}
+		
+		public static void clickByActionsClass(String LocatorType, String LocatorValue) {
+			WebElement element=getWebElement(LocatorType, LocatorValue);
+			Actions action=new Actions(driver);
+			action.moveToElement(element).click(element).build().perform();
+
+		}
+		
+		
+		public static void Scrollup() {
+			try {
+				Robot robot=new Robot();
+				robot.keyPress(KeyEvent.VK_PAGE_UP);
+			} catch (AWTException e) {
+				
+				e.printStackTrace();
+			}
+			
+
+		}
+		public static void ScrollDown() {
+			
+			try {
+				Robot robot = new Robot();
+				robot.keyPress(KeyEvent.VK_PAGE_DOWN);
+			} catch (AWTException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+
+		}
+		
+		public static void pressEnter(String LocatorType,String LocatorValue) {
+			WebElement element=getWebElement(LocatorType, LocatorValue);
+			Actions action=new Actions(driver);
+			action.keyDown(element, Keys.ENTER).build().perform();
+			
+
+		}
+		public static void doubleClick(String LocatorType,String LocatorValue) {
+			WebElement element=getWebElement(LocatorType, LocatorValue);
+			Actions action=new Actions(driver);
+			action.doubleClick(element).build().perform();
+		}
+		public static void clickAndHold(String LocatorType,String LocatorValue) {
+			WebElement element=getWebElement(LocatorType, LocatorValue);
+			Actions action=new Actions(driver);
+			action.clickAndHold(element).build().perform();
+		}
+		public static void moveToElement(String LocatorType,String LocatorValue) {
+			WebElement element=getWebElement(LocatorType, LocatorValue);
+			Actions action=new Actions(driver);
+			action.moveToElement(element).build().perform();
+
+		}
+		
+		public static List<WebElement> getWebElements(String LocatorType, String LocatorValue) {
+			
+			switch (LocatorType) {
+			case "XPATH":
+				elements = driver.findElements(By.xpath(LocatorValue));
+				break;
+			case "ID":
+				elements = driver.findElements(By.id(LocatorValue));
+				break;
+			case "CLASSNAME":
+				elements = driver.findElements(By.className(LocatorValue));
+				break;
+			case "NAME":
+				elements = driver.findElements(By.name(LocatorValue));
+				break;
+			case "CSS":
+				elements = driver.findElements(By.cssSelector(LocatorValue));
+				break;
+			case "TAGNAME":
+				elements = driver.findElements(By.tagName(LocatorValue));
+				break;
+			case "LINKTEXT":
+				elements = driver.findElements(By.linkText(LocatorValue));
+				break;
+			case "PARTAIL_LINK_TEXT":
+				elements = driver.findElements(By.partialLinkText(LocatorValue));
+				break;
+			default:
+				System.err.println("Please enter valid LocatorType :" + LocatorType
+						+ "Expected: CSS,XPATH,ID,NAME,CLASSNAME,TAGNAME,LINTEXT,PARTIAL_LINK_TEXT");
+
+			}
+			
+			
+			return elements;
+			
+
+		}
 }
